@@ -32,8 +32,8 @@ jobs:
           command: >
             cd ~/code/AndroidDemo && 
             sudo gcloud firebase test android run
-              --app <local_server_path>/<app_apk>.apk
-              --test <local_server_path>/<app_test_apk>.apk
+              --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk
+              --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
               --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
       - run:
           name: Install gsutil dependency and copy test results data
