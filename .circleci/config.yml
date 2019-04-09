@@ -29,12 +29,17 @@ jobs:
             sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
       - run:
           name: Test with Firebase Test Lab
-          command: |
-            cd ~/code/AndroidDemo
-            sudo gcloud firebase test android run --type instrumentation --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          command: >
+            cd ~/code/AndroidDemo &&
+            sudo gcloud firebase test android run 
+              --type instrumentation 
+              --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk 
+              --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk 
+              --results-bucket mytaxi-demo
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
+            find ~/code/ -name 'reports'
             sudo pip install -U crcmod
             sudo gsutil ls gs://mytaxi-demo.appspot.com
             sudo gsutil -m cp -r -U `sudo gsutil ls gs://mytaxi-demo.appspot.com/results | tail -1` ${CIRCLE_ARTIFACTS}/ | true
