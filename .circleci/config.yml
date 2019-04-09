@@ -39,6 +39,7 @@ jobs:
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
+            sudo gsutil ls gs://mytaxi-demo.appspot.com
             sudo gsutil -m cp -r -U `sudo gsutil ls gs://mytaxi-demo.appspot.com/results | tail -1` ${CIRCLE_ARTIFACTS}/ | true
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: ~/code/AndroidDemo/app/build/reports
