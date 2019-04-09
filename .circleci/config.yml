@@ -37,7 +37,7 @@ jobs:
               --type instrumentation
               --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk
               --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-              --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
+              #--results-bucket cloud-test-${GOOGLE_PROJECT_ID}
       - run:
           name: Install gsutil dependency and copy test results data
           command: |
