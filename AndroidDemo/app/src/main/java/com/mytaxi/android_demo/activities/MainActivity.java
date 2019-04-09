@@ -4,11 +4,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.test.espresso.IdlingResource;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,7 +15,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,7 +35,6 @@ import com.mytaxi.android_demo.adapters.DriverAdapter;
 import com.mytaxi.android_demo.dependencies.component.AppComponent;
 import com.mytaxi.android_demo.models.Driver;
 import com.mytaxi.android_demo.utils.PermissionHelper;
-import com.mytaxi.android_demo.utils.SimpleIdlingResource;
 import com.mytaxi.android_demo.utils.network.HttpClient;
 import com.mytaxi.android_demo.utils.storage.SharedPrefStorage;
 
@@ -69,9 +65,6 @@ public class MainActivity extends AuthenticatedActivity
     private Location mLastKnownLocation;
     private AutoCompleteTextView mSearchView;
     private DriverAdapter mAdapter;
-
-    @Nullable
-    private SimpleIdlingResource mIdlingResource;
 
     @Override
     protected void onResume() {
@@ -125,9 +118,6 @@ public class MainActivity extends AuthenticatedActivity
         mHttpClient.fetchDrivers(new HttpClient.DriverCallback() {
             @Override
             public void run() {
-                if (mIdlingResource != null) {
-                    mIdlingResource.setIdleState(false);
-                }
                 mAdapter = new DriverAdapter(MainActivity.this, mDrivers, new DriverAdapter.OnDriverClickCallback() {
                     @Override
                     public void execute(Driver driver) {
@@ -138,9 +128,6 @@ public class MainActivity extends AuthenticatedActivity
                     @Override
                     public void run() {
                         mSearchView.setAdapter(mAdapter);
-                        if (mIdlingResource != null) {
-                            mIdlingResource.setIdleState(true);
-                        }
                     }
                 });
             }
@@ -259,15 +246,6 @@ public class MainActivity extends AuthenticatedActivity
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
         }
-    }
-
-    @VisibleForTesting
-    @NonNull
-    public IdlingResource getIdlingResource() {
-        if (mIdlingResource == null) {
-            mIdlingResource = new SimpleIdlingResource();
-        }
-        return mIdlingResource;
     }
 
     @VisibleForTesting

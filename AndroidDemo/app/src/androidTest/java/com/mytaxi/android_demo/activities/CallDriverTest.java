@@ -40,9 +40,7 @@ import static org.hamcrest.Matchers.containsString;
 // * First page should be more user friendly and show at least some functionality - example map with cars - not login
 // * If no internet and user tries to login no error is shown
 // * When user clicks login probably better to show progress bar(if internet is slow - hard to understand if button was clicked)
-// * IdlingResource doesn't work
 // * Add resetting application state between runs
-// * Test is unstable
 // * Driver search doesn't work in landscape mode(Suggestions are not visible because keyboard blocks screen)
 @RunWith(AndroidJUnit4.class)
 public class CallDriverTest {
@@ -65,12 +63,10 @@ public class CallDriverTest {
     //  Wrappers for common methods for better readability
     private void type(int id, String text) {
         onView(withId(id)).perform(typeText(text), closeSoftKeyboard());
-        sleep();
     }
 
     private void click(int id) {
         onView(withId(id)).perform(ViewActions.click());
-        sleep();
     }
 
     // Custom asserts
@@ -84,24 +80,12 @@ public class CallDriverTest {
                 toPackage("com.google.android.dialer")));
     }
 
-    // Additional methods
-    private void sleep() {
-        // TODO: This sleep should be changed to use IdlingResource
-        // find a proper way to IdlingResource with multiple Activities
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Driver selectDriver(int position) {
         Driver driver = activityRule.getActivity().getDriver(position);
         String selectedDriverName = driver.getName();
         onView(withText(containsString(selectedDriverName)))
                 .inRoot(isPlatformPopup())
                 .perform(ViewActions.click());
-        sleep();
         return driver;
     }
 
@@ -109,8 +93,6 @@ public class CallDriverTest {
         type(FIELD_USERNAME, USERNAME);
         type(FIELD_PASSWORD, PASSWORD);
         click(BTN_LOGIN);
-
-        sleep();
     }
 
     public void safeLogout() {
@@ -127,7 +109,7 @@ public class CallDriverTest {
 
     @Before
     public void setUp() {
-        mIdlingResource = activityRule.getActivity().getIdlingResource();
+        mIdlingResource = AuthenticationActivity.getIdlingResource();
         Espresso.registerIdlingResources(mIdlingResource);
 
         safeLogout();

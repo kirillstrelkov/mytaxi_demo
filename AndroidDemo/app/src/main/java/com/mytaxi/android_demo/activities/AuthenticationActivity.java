@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.EditText;
 import com.mytaxi.android_demo.App;
 import com.mytaxi.android_demo.R;
 import com.mytaxi.android_demo.dependencies.component.AppComponent;
+import com.mytaxi.android_demo.utils.SimpleIdlingResource;
 import com.mytaxi.android_demo.utils.network.HttpClient;
 import com.mytaxi.android_demo.utils.storage.SharedPrefStorage;
 
@@ -29,6 +33,8 @@ import javax.inject.Inject;
 import static com.mytaxi.android_demo.misc.Constants.LOG_TAG;
 
 public class AuthenticationActivity extends AppCompatActivity {
+    @Nullable
+    private static SimpleIdlingResource mIdlingResource;
 
     @Inject
     HttpClient mHttpClient;
@@ -65,6 +71,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void attemptLogin() {
+        setIdlingResource(false);
         final String username = mEditTextUsername.getText().toString();
         final String password = mEditTextPassword.getText().toString();
         mHttpClient.fetchUser(RANDOM_USER_SEED, new HttpClient.UserCallback() {
@@ -80,6 +87,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     Snackbar.make(view, R.string.message_login_fail, Snackbar.LENGTH_LONG).show();
                     Log.i(LOG_TAG, "Failed login with user: " + username);
                 }
+                setIdlingResource(true);
             }
         });
     }
@@ -97,4 +105,22 @@ public class AuthenticationActivity extends AppCompatActivity {
         return passwordWithSalt;
     }
 
+    @NonNull
+    protected static IdlingResource getIdlingResource() {
+        Log.d(LOG_TAG, "Idle class");
+        if (mIdlingResource == null) {
+            Log.d(LOG_TAG, "Idle resource new");
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
+    @NonNull
+    protected static void setIdlingResource(boolean idle) {
+        Log.d(LOG_TAG, "Setting Idle Resource: " + idle);
+        if (mIdlingResource != null) {
+            Log.d(LOG_TAG, "state: " + idle);
+            mIdlingResource.setIdleState(idle);
+        }
+    }
 }
