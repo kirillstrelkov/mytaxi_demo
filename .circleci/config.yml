@@ -32,7 +32,7 @@ jobs:
           command: >
             cd ~/code/AndroidDemo && 
             sudo gcloud firebase test android run
-              --type instrumentation
+              --type robo
               --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk
               --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
               --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
