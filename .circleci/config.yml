@@ -32,16 +32,3 @@ jobs:
           command: >
             cd ~/code/AndroidDemo &&
             sudo gcloud firebase test android run --type instrumentation --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk --test ~/code/AndroidDemo/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-      - run:
-          name: Install gsutil dependency and copy test results data
-          command: |
-            find ~/code/ -name 'reports'
-            sudo pip install -U crcmod
-            sudo gsutil ls gs://mytaxi-demo.appspot.com
-            sudo gsutil -m cp -r -U `sudo gsutil ls gs://mytaxi-demo.appspot.com/results | tail -1` ${CIRCLE_ARTIFACTS}/ | true
-      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: ~/code/AndroidDemo/app/build/reports
-          destination: reports
-      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: ~/code/AndroidDemo/app/build/test-results
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
