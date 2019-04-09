@@ -37,12 +37,13 @@ import static org.hamcrest.Matchers.containsString;
 
 // Findings and improvements
 // * In side menu username has white color - very hard to read.
-// * First page should be more user friendly and show at least some functionality - example map with cars
+// * First page should be more user friendly and show at least some functionality - example map with cars - not login
 // * If no internet and user tries to login no error is shown
 // * When user clicks login probably better to show progress bar(if internet is slow - hard to understand if button was clicked)
 // * IdlingResource doesn't work
 // * Add resetting application state between runs
 // * Test is unstable
+// * Driver search doesn't work in landscape mode(Suggestions are not visible because keyboard blocks screen)
 @RunWith(AndroidJUnit4.class)
 public class CallDriverTest {
     // Data, should be defined in another place for reuse
