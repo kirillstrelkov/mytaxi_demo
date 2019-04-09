@@ -30,7 +30,9 @@ jobs:
       - run:
           name: Test with Firebase Test Lab
           command: >
-            cd ~/code/AndroidDemo && 
+            ls -la ~/code/AndroidDemo &&
+            tree ~/code/AndroidDemo &&
+            cd ~/code/AndroidDemo &&
             sudo gcloud firebase test android run
               --type instrumentation
               --app ~/code/AndroidDemo/app/build/outputs/apk/debug/app-debug.apk
